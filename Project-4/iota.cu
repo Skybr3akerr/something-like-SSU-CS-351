@@ -11,9 +11,14 @@ const DataType DefalutStartValue = -6.0;
 const Count TestSize = 1'000'000'000;
 const Count NumCheckValues = 500;
 
-//
-// --- Add your CUDA kernel implementation of iota here
-//
+__global__
+void iota(Count n, DataType* values, DataType startValue) {
+    Count i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (i < n) {
+        values[i] = startValue + static_cast<DataType>(i);
+    }
+}
 
 int main(int argc, char* argv[]) {
     Count numValues = argc > 1 ? std::stol(argv[1]) : TestSize;
